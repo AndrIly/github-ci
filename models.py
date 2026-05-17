@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import Mapped, DeclarativeBase
+from sqlalchemy import Integer, String
+from sqlalchemy.orm import DeclarativeBase, Mapped
 from sqlalchemy.testing.schema import mapped_column
 
 
