@@ -5,9 +5,9 @@ from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import models
+from models import Base, Recipes
 import schema
-from database import Base, async_session, engine
+from database import async_session, engine
 
 
 @asynccontextmanager
@@ -34,15 +34,15 @@ async def get_recipes(
 ) -> List[dict[str, str | int]]:
     res = await session.execute(
         select(
-            models.Recipes.id,
-            models.Recipes.title,
-            models.Recipes.time_cooking,
-            models.Recipes.ingredient,
-            models.Recipes.description,
-            models.Recipes.count_watch,
+            Recipes.id,
+            Recipes.title,
+            Recipes.time_cooking,
+            Recipes.ingredient,
+            Recipes.description,
+            Recipes.count_watch,
         ).order_by(
-            models.Recipes.count_watch.desc(),
-            models.Recipes.time_cooking.asc(),
+            Recipes.count_watch.desc(),
+            Recipes.time_cooking.asc(),
         )
     )
     result = res.all()
@@ -61,8 +61,8 @@ async def get_recipes(
 @app.post("/recipes", response_model=schema.RecipeOut, summary="Создать новый рецепт")
 async def create_recipe(
     recipe: schema.RecipeIn, session: AsyncSession = Depends(get_session)
-) -> models.Recipes:
-    new_recipe = models.Recipes(
+) -> Recipes:
+    new_recipe = Recipes(
         title=recipe.title,
         count_watch=0,
         description=recipe.description,
@@ -84,19 +84,19 @@ async def get_recipe(
     id: int, session: AsyncSession = Depends(get_session)
 ) -> dict[str, str | int]:
     result = await session.execute(
-        select(models.Recipes).where(models.Recipes.id == id)
+        select(Recipes).where(Recipes.id == id)
     )
     recipe = result.scalar_one_or_none()
     if not recipe:
         raise HTTPException(status_code=404, detail="Recipe not found")
-    recipe.count_watch += 1
+    recipe.count_watch = int(recipe.count_watch or 0) + 1
     await session.commit()
     await session.refresh(recipe)
 
     return {
-        "id": recipe.id,
-        "title": recipe.title,
-        "time_cooking": recipe.time_cooking,
-        "ingredient": recipe.ingredient,
-        "description": recipe.description,
+        "id": int(recipe.id),
+        "title": str(recipe.title),
+        "time_cooking": str(recipe.time_cooking),
+        "ingredient": str(recipe.ingredient),
+        "description": str(recipe.description),
     }

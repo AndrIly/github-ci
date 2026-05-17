@@ -1,13 +1,17 @@
 from sqlalchemy import Column, Integer, String
+from sqlalchemy.orm import Mapped, DeclarativeBase
+from sqlalchemy.testing.schema import mapped_column
 
-from database import Base
+
+class Base(DeclarativeBase):
+    pass
 
 
 class Recipes(Base):
     __tablename__ = "recipes"
-    id = Column(Integer, primary_key=True)
-    title = Column(String)
-    count_watch = Column(Integer)
-    time_cooking = Column(Integer)
-    ingredient = Column(String)
-    description = Column(String)
+    id: Mapped[int] = mapped_column(Integer, primary_key=True)
+    title: Mapped[str] = mapped_column(String)
+    count_watch: Mapped[int] = mapped_column(Integer, default=0)
+    time_cooking: Mapped[int] = mapped_column(Integer)
+    ingredient: Mapped[str] = mapped_column(String)
+    description: Mapped[str] = mapped_column(String)
