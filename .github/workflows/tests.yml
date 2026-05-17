@@ -44,10 +44,10 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: action/checkout@v4
+        uses: actions/checkout@v4
 
       - name: Set up Python
-        uses: action/setup-python@v5
+        uses: actions/setup-python@v5
 
       - name: Install dependencies
         run: |
