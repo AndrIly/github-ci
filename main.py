@@ -83,9 +83,7 @@ async def create_recipe(
 async def get_recipe(
     id: int, session: AsyncSession = Depends(get_session)
 ) -> dict[str, str | int]:
-    result = await session.execute(
-        select(Recipes).where(Recipes.id == id)
-    )
+    result = await session.execute(select(Recipes).where(Recipes.id == id))
     recipe = result.scalar_one_or_none()
     if not recipe:
         raise HTTPException(status_code=404, detail="Recipe not found")
