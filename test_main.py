@@ -1,11 +1,14 @@
-from fastapi.testclient import TestClient
-from main import app
 import pytest
+from fastapi.testclient import TestClient
+
+from main import app
+
 
 @pytest.fixture()
 def client():
     with TestClient(app) as c:
         yield c
+
 
 def test_create_recipe(client):
     response = client.post(
@@ -14,17 +17,17 @@ def test_create_recipe(client):
             "title": "string",
             "description": "string",
             "time_cooking": 1,
-            "ingredient": "string"
-        }
+            "ingredient": "string",
+        },
     )
     assert response.status_code == 200
 
     data = response.json()
 
-    assert data['id'] is not None
-    assert data['title'] == "string"
-    assert data['description'] == "string"
-    assert data['time_cooking'] == 1
+    assert data["id"] is not None
+    assert data["title"] == "string"
+    assert data["description"] == "string"
+    assert data["time_cooking"] == 1
     assert data["ingredient"] == "string"
     assert data["count_watch"] == 0
 
@@ -38,7 +41,6 @@ def test_get_recipes(client):
             "time_cooking": 30,
             "ingredient": "14",
         },
-
     )
 
     response = client.get("/recipes")
@@ -51,7 +53,6 @@ def test_get_recipes(client):
     assert "title" in recipe
     assert "count_watch" in recipe
     assert "time_cooking" in recipe
-
 
 
 def test_get_recipe_detail(client):
@@ -85,7 +86,6 @@ def test_get_recipe_detail_increases_count_watch(client):
             "time_cooking": 10,
             "ingredient": "kllo",
         },
-
     )
 
     recipe_id = create_response.json()["id"]
@@ -111,7 +111,6 @@ def test_get_recipe_not_found(client):
 
 def test_create_recipe_validation_error(client):
     response = client.post(
-
         "/recipes",
         json={
             "title": "",

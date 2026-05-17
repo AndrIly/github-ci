@@ -1,5 +1,7 @@
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, Integer, String
+
 from database import Base
+
 
 class Recipes(Base):
     __tablename__ = "recipes"
