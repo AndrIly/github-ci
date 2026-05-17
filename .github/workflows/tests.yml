@@ -55,7 +55,7 @@ jobs:
           pip install --no-cache -r requirements.txt
 
       - name: Run test
-        run: #cmd
+        run: pytest
 
 
 
