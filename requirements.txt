@@ -12,10 +12,12 @@ httptools==0.7.1
 httpx==0.28.1
 idna==3.15
 isort==8.0.1
+flake8==7.3.0
 pydantic==2.13.4
 pydantic_core==2.46.4
 python-dotenv==1.2.2
 pytest==9.0.3
+mypy==2.1.0
 PyYAML==6.0.3
 SQLAlchemy==2.1.0b1
 starlette==1.0.0
